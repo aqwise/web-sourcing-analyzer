@@ -11,32 +11,35 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import ReactMarkdown from 'react-markdown';
 
 interface ChatMessage {
-  type: 'normalized' | 'osint';
+  type: 'prompt' | 'normalized' | 'osint';
   content: string;
 }
 
 export default function Home() {
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
-  const [normalizedData, setNormalizedData] = useState<NormalizeStaffingMessageOutput | null>(null);
   const [osintResults, setOsintResults] = useState<OsintAnalysisOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAnalysis = async () => {
     setIsLoading(true);
 
+    // Add the staffing message to chat history as a prompt
+    setChatHistory(prev => [...prev, { type: 'prompt', content: message }]);
+
     try {
       const normalized = await normalizeStaffingMessage({ message });
-      setNormalizedData(normalized);
+      // setNormalizedData(normalized);
 
       const normalizedContent = `
-**Название компании:** ${normalized.companyName}
-**Роль:** ${normalized.role}
-**Технологический стек:** ${normalized.techStack}
-**Длительность проекта:** ${normalized.projectDuration || 'Не указана'}
-**Размер команды:** ${normalized.teamSize || 'Не указан'}
-**Уровень английского:** ${normalized.englishLevel || 'Не указан'}
-**Релевантная информация:**\n${normalized.relevantInfo}`;
+**Company Name:** ${normalized.companyName}
+**Role:** ${normalized.role}
+**Tech Stack:** ${normalized.techStack}
+**Project Duration:** ${normalized.projectDuration || 'Not specified'}
+**Team Size:** ${normalized.teamSize || 'Not specified'}
+**English Level:** ${normalized.englishLevel || 'Not specified'}
+**Relevant Info:**
+${normalized.relevantInfo}`;
 
       setChatHistory(prev => [...prev, { type: 'normalized', content: normalizedContent }]);
 
@@ -44,18 +47,17 @@ export default function Home() {
         companyName: normalized.companyName,
         normalizedData: JSON.stringify(normalized),
       });
-      setOsintResults(osint);
 
       let osintContent = "";
       if (osint && osint.companyInfo) {
         osintContent = `
-**Обзор компании:** ${osint.companyInfo.summary}
-**Тип компании:** ${osint.companyInfo.type}
-**Интересные факты:** ${osint.companyInfo.interestingFacts}
-**Привлекательность для QA Automation:** ${osint.companyInfo.attractivenessScore}
-**Идеальный кандидат:** ${osint.companyInfo.idealCandidateProfile}`;
+**Company Summary:** ${osint.companyInfo.summary}
+**Company Type:** ${osint.companyInfo.type}
+**Interesting Facts:** ${osint.companyInfo.interestingFacts}
+**Attractiveness Score:** ${osint.companyInfo.attractivenessScore}
+**Ideal Candidate:** ${osint.companyInfo.idealCandidateProfile}`;
       } else {
-        osintContent = "OSINT анализ не удался или не вернул данных.";
+        osintContent = "OSINT analysis failed or returned no data.";
       }
 
       setChatHistory(prev => [...prev, { type: 'osint', content: osintContent }]);
@@ -63,7 +65,6 @@ export default function Home() {
     } catch (error: any) {
       console.error("Analysis failed:", error);
       setChatHistory(prev => [...prev, { type: 'osint', content: `Error: ${error.message}` }]);
-      // Consider implementing a toast notification for errors
     } finally {
       setIsLoading(false);
     }
@@ -109,15 +110,21 @@ export default function Home() {
                 <div className="space-y-4">
                   {chatHistory.map((chatMessage, index) => (
                     <div key={index} className="mb-2">
+                      {chatMessage.type === 'prompt' && (
+                        <div className="text-sm text-muted-foreground">
+                          <span className="font-semibold">Staffing Message:</span>
+                          <ReactMarkdown>{chatMessage.content}</ReactMarkdown>
+                        </div>
+                      )}
                       {chatMessage.type === 'normalized' && (
                         <div className="text-sm text-muted-foreground">
-                          <span className="font-semibold">Нормализация данных:</span>
+                          <span className="font-semibold">Normalized Data:</span>
                           <ReactMarkdown>{chatMessage.content}</ReactMarkdown>
                         </div>
                       )}
                       {chatMessage.type === 'osint' && (
                         <div className="text-sm text-muted-foreground">
-                          <span className="font-semibold">OSINT Анализ:</span>
+                          <span className="font-semibold">OSINT Analysis:</span>
                           <ReactMarkdown>{chatMessage.content}</ReactMarkdown>
                         </div>
                       )}

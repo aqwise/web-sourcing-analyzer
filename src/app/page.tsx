@@ -11,7 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import ReactMarkdown from 'react-markdown';
 
 interface ChatMessage {
-  type: 'input' | 'normalized' | 'osint';
+  type: 'normalized' | 'osint';
   content: string;
 }
 
@@ -24,20 +24,19 @@ export default function Home() {
 
   const handleAnalysis = async () => {
     setIsLoading(true);
-    setChatHistory(prev => [...prev, { type: 'input', content: message }]);
 
     try {
       const normalized = await normalizeStaffingMessage({ message });
       setNormalizedData(normalized);
 
       const normalizedContent = `
-**Company Name:** ${normalized.companyName}
-**Role:** ${normalized.role}
-**Tech Stack:** ${normalized.techStack}
-**Project Duration:** ${normalized.projectDuration || 'Not specified'}
-**Team Size:** ${normalized.teamSize || 'Not specified'}
-**English Level:** ${normalized.englishLevel || 'Not specified'}
-**Relevant Info:**\n${normalized.relevantInfo}`;
+**Название компании:** ${normalized.companyName}
+**Роль:** ${normalized.role}
+**Технологический стек:** ${normalized.techStack}
+**Длительность проекта:** ${normalized.projectDuration || 'Не указана'}
+**Размер команды:** ${normalized.teamSize || 'Не указан'}
+**Уровень английского:** ${normalized.englishLevel || 'Не указан'}
+**Релевантная информация:**\n${normalized.relevantInfo}`;
 
       setChatHistory(prev => [...prev, { type: 'normalized', content: normalizedContent }]);
 
@@ -50,13 +49,13 @@ export default function Home() {
       let osintContent = "";
       if (osint && osint.companyInfo) {
         osintContent = `
-**Company Summary:** ${osint.companyInfo.summary}
-**Company Type:** ${osint.companyInfo.type}
-**Interesting Facts:** ${osint.companyInfo.interestingFacts}
-**Attractiveness Score:** ${osint.companyInfo.attractivenessScore}
-**Ideal Candidate Profile:** ${osint.companyInfo.idealCandidateProfile}`;
+**Обзор компании:** ${osint.companyInfo.summary}
+**Тип компании:** ${osint.companyInfo.type}
+**Интересные факты:** ${osint.companyInfo.interestingFacts}
+**Привлекательность для QA Automation:** ${osint.companyInfo.attractivenessScore}
+**Идеальный кандидат:** ${osint.companyInfo.idealCandidateProfile}`;
       } else {
-        osintContent = "OSINT analysis failed or returned no data.";
+        osintContent = "OSINT анализ не удался или не вернул данных.";
       }
 
       setChatHistory(prev => [...prev, { type: 'osint', content: osintContent }]);
@@ -110,21 +109,15 @@ export default function Home() {
                 <div className="space-y-4">
                   {chatHistory.map((chatMessage, index) => (
                     <div key={index} className="mb-2">
-                      {chatMessage.type === 'input' && (
-                        <div className="text-sm text-foreground">
-                          <span className="font-semibold">Input:</span>
-                          <ReactMarkdown>{chatMessage.content}</ReactMarkdown>
-                        </div>
-                      )}
                       {chatMessage.type === 'normalized' && (
                         <div className="text-sm text-muted-foreground">
-                          <span className="font-semibold">Normalized Data:</span>
+                          <span className="font-semibold">Нормализация данных:</span>
                           <ReactMarkdown>{chatMessage.content}</ReactMarkdown>
                         </div>
                       )}
                       {chatMessage.type === 'osint' && (
                         <div className="text-sm text-muted-foreground">
-                          <span className="font-semibold">OSINT Analysis:</span>
+                          <span className="font-semibold">OSINT Анализ:</span>
                           <ReactMarkdown>{chatMessage.content}</ReactMarkdown>
                         </div>
                       )}

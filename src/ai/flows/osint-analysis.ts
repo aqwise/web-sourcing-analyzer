@@ -50,7 +50,7 @@ const prompt = ai.definePrompt({
       }).describe('OSINT analysis of the company')
     }),
   },
-  prompt: `You are an AI analyst. Given the company name and normalized data from the hiring message, perform an OSINT analysis to gather information about the company. Answer in English.
+  prompt: `You are an AI analyst. Given the company name and normalized data from the hiring message, perform an OSINT analysis to gather information about the company. Answer in Russian.
 
 Company name: {{{companyName}}}
 

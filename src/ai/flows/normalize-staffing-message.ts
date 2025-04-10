@@ -5,7 +5,7 @@
  *
  * - normalizeStaffingMessage - A function that normalizes a staffing message.
  * - NormalizeStaffingMessageInput - The input type for the normalizeStaffingMessage function.
- * - NormalizeStaffingMessageOutput - The return type for the normalizeStaffingMessage function.
+ * - NormalizeStaffingMessageOutput - The return type for the NormalizeStaffingMessage function.
  */
 
 import {ai} from '@/ai/ai-instance';
@@ -49,7 +49,7 @@ const normalizeStaffingMessagePrompt = ai.definePrompt({
       relevantInfo: z.string().describe('Relevant information from the request that was not included in other fields.'),
     }),
   },
-  prompt: `Analyze this staffing request and extract the following information:
+  prompt: `Analyze this staffing request and extract the following information. Answer in Russian.
 1. Company name
 2. Role name
 3. Required tech stack

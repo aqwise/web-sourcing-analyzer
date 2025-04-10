@@ -49,18 +49,18 @@ const normalizeStaffingMessagePrompt = ai.definePrompt({
       relevantInfo: z.string().describe('Relevant information from the request that was not included in other fields.'),
     }),
   },
-  prompt: `Analyze this staffing request and extract the following information, answering in English:
-1. Company Name
-2. Role
-3. Required Tech Stack
-4. Project Duration
-5. Approximate Team Size (if specified or implied)
-6. Minimum English Level
-7. Relevant information from the request that was not included in other categories
+  prompt: `Проанализируй этот стаффинг-запрос и извлеки следующую информацию:
+1. Название компании
+2. Название роли
+3. Необходимый технологический стек
+4. Продолжительность проекта
+5. Приблизительный размер команды (если указан или подразумевается)
+6. Минимальный уровень английского языка
+7. Релевантная информация из запроса, не включенная в другие категории
 
-Format your response as Markdown with headings.
+Форматируй свой ответ в Markdown с заголовками.
 
-Original text:
+Исходный текст:
 {{{message}}}`,
 });
 
@@ -78,4 +78,5 @@ const normalizeStaffingMessageFlow = ai.defineFlow<
     return output!;
   }
 );
+
 

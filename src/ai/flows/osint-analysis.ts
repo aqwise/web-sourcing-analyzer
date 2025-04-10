@@ -50,20 +50,20 @@ const prompt = ai.definePrompt({
       }).describe('OSINT analysis of the company')
     }),
   },
-  prompt: `You are an AI analyst. Given the name of a company and normalized data from a staffing message, perform OSINT analysis to gather information about the company. Answer in English.
+  prompt: `Ты - AI аналитик. Учитывая название компании и нормализованные данные из сообщения о найме, выполни OSINT-анализ для сбора информации о компании. Ответь на русском языке.
 
-Company Name: {{{companyName}}}
+Название компании: {{{companyName}}}
 
-Normalized Data:
+Нормализованные данные:
 {{{normalizedData}}}
 
-Generate the following information, formatted as Markdown with headings:
+Сгенерируй следующую информацию, отформатированную как Markdown с заголовками:
 
-1.  What does this company do (website, sector, clients, products)?
-2.  What is the type of company (startup / corporation / R&D center)?
-3.  What are some interesting facts about the company (AI, investments, hiring)?
-4.  How attractive is this company for a QA Automation Engineer based on the project stack (score from 1 to 5)?
-5.  What is the ideal QA specialist profile for working in this company, including soft skills, hard skills, tasks, and familiar projects/technologies?`,
+1.  Что делает эта компания (веб-сайт, сектор, клиенты, продукты)?
+2.  Какой тип компании (стартап / корпорация / R&D центр)?
+3.  Какие интересные факты о компании (AI, инвестиции, наем)?
+4.  Насколько привлекательна эта компания для QA Automation Engineer, исходя из стека проекта (оценка от 1 до 5)?
+5.  Каков идеальный профиль QA-специалиста для работы в этой компании, включая софт-скиллы, хард-скиллы, задачи и привычные проекты/технологии?`,
 });
 
 const osintAnalysisFlow = ai.defineFlow<
@@ -77,4 +77,5 @@ const osintAnalysisFlow = ai.defineFlow<
   const {output} = await prompt(input);
   return output!;
 });
+
 

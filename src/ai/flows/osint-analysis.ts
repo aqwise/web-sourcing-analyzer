@@ -50,7 +50,7 @@ const prompt = ai.definePrompt({
       }).describe('OSINT analysis of the company')
     }),
   },
-  prompt: `You are an AI analyst. Given the name of a company and normalized data from a staffing message, perform OSINT analysis to gather information about the company.
+  prompt: `You are an AI analyst. Given the name of a company and normalized data from a staffing message, perform OSINT analysis to gather information about the company. Answer in English.
 
 Company Name: {{{companyName}}}
 
@@ -77,3 +77,4 @@ const osintAnalysisFlow = ai.defineFlow<
   const {output} = await prompt(input);
   return output!;
 });
+

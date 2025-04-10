@@ -49,7 +49,7 @@ const normalizeStaffingMessagePrompt = ai.definePrompt({
       relevantInfo: z.string().describe('Relevant information from the request that was not included in other fields.'),
     }),
   },
-  prompt: `Analyze this staffing request and extract:
+  prompt: `Analyze this staffing request and extract the following information, answering in English:
 1. Company Name
 2. Role
 3. Required Tech Stack
@@ -78,3 +78,4 @@ const normalizeStaffingMessageFlow = ai.defineFlow<
     return output!;
   }
 );
+

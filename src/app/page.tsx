@@ -78,26 +78,26 @@ export default function Home() {
                     <div className="text-sm text-muted-foreground">
                       <ReactMarkdown>
                         {`
-### Company Name
-${normalizedData.companyName}
+**Company Name:** ${normalizedData.companyName}
 
-### Role
-${normalizedData.role}
+**Role:** ${normalizedData.role}
 
-### Tech Stack
-${normalizedData.techStack}
+**Tech Stack:** ${normalizedData.techStack}
 
-### Project Duration
-${normalizedData.projectDuration || 'Not specified'}
+**Project Duration:** ${normalizedData.projectDuration || 'Not specified'}
 
-### Team Size
-${normalizedData.teamSize || 'Not specified'}
+**Team Size:** ${normalizedData.teamSize || 'Not specified'}
 
-### English Level
-${normalizedData.englishLevel || 'Not specified'}
+**English Level:** ${normalizedData.englishLevel || 'Not specified'}
 
-### Relevant Info
-${normalizedData.relevantInfo}
+**Relevant Info:**
+${normalizedData.relevantInfo
+                            .split('\n')
+                            .map(item => item.trim())
+                            .filter(item => item !== '')
+                            .map(item => `* ${item}`)
+                            .join('\n')
+                        }
                       `}
                       </ReactMarkdown>
                     </div>
@@ -110,20 +110,15 @@ ${normalizedData.relevantInfo}
                     <div className="text-sm text-muted-foreground">
                       <ReactMarkdown>
                         {`
-### Company Summary
-${osintResults.companyInfo.summary}
+**Company Summary:** ${osintResults.companyInfo.summary}
 
-### Company Type
-${osintResults.companyInfo.type}
+**Company Type:** ${osintResults.companyInfo.type}
 
-### Interesting Facts
-${osintResults.companyInfo.interestingFacts}
+**Interesting Facts:** ${osintResults.companyInfo.interestingFacts}
 
-### Attractiveness Score
-${osintResults.companyInfo.attractivenessScore}
+**Attractiveness Score:** ${osintResults.companyInfo.attractivenessScore}
 
-### Ideal Candidate Profile
-${osintResults.companyInfo.idealCandidateProfile}
+**Ideal Candidate Profile:** ${osintResults.companyInfo.idealCandidateProfile}
                       `}
                       </ReactMarkdown>
                     </div>

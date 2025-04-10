@@ -8,6 +8,7 @@ import { performOsintAnalysis, OsintAnalysisOutput } from "@/ai/flows/osint-anal
 import { normalizeStaffingMessage, NormalizeStaffingMessageOutput } from "@/ai/flows/normalize-staffing-message";
 import { Icons } from "@/components/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import ReactMarkdown from 'react-markdown';
 
 export default function Home() {
   const [message, setMessage] = useState("");
@@ -74,18 +75,54 @@ export default function Home() {
                 {normalizedData && (
                   <div className="mb-4">
                     <h2 className="text-lg font-semibold text-foreground">Normalized Data</h2>
-                    <pre className="text-sm text-muted-foreground">
-                      {JSON.stringify(normalizedData, null, 2)}
-                    </pre>
+                    <ReactMarkdown className="text-sm text-muted-foreground">
+                      {`
+### Company Name
+${normalizedData.companyName}
+
+### Role
+${normalizedData.role}
+
+### Tech Stack
+${normalizedData.techStack}
+
+### Project Duration
+${normalizedData.projectDuration || 'Not specified'}
+
+### Team Size
+${normalizedData.teamSize || 'Not specified'}
+
+### English Level
+${normalizedData.englishLevel || 'Not specified'}
+
+### Relevant Info
+${normalizedData.relevantInfo}
+                      `}
+                    </ReactMarkdown>
                   </div>
                 )}
 
                 {osintResults && (
                   <div>
                     <h2 className="text-lg font-semibold text-foreground">OSINT Analysis</h2>
-                    <pre className="text-sm text-muted-foreground">
-                      {JSON.stringify(osintResults, null, 2)}
-                    </pre>
+                    <ReactMarkdown className="text-sm text-muted-foreground">
+                      {`
+### Company Summary
+${osintResults.companyInfo.summary}
+
+### Company Type
+${osintResults.companyInfo.type}
+
+### Interesting Facts
+${osintResults.companyInfo.interestingFacts}
+
+### Attractiveness Score
+${osintResults.companyInfo.attractivenessScore}
+
+### Ideal Candidate Profile
+${osintResults.companyInfo.idealCandidateProfile}
+                      `}
+                    </ReactMarkdown>
                   </div>
                 )}
 

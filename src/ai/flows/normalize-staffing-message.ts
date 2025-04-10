@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use server';
 
 /**
@@ -59,10 +58,10 @@ const normalizeStaffingMessagePrompt = ai.definePrompt({
 6. Minimum English Level
 7. Relevant information from the request that was not included in other categories
 
-Format: Markdown with headings
+Format your response as Markdown with headings.
 
 Original text:
-{{{message}}}`, 
+{{{message}}}`,
 });
 
 const normalizeStaffingMessageFlow = ai.defineFlow<

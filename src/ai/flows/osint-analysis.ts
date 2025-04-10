@@ -57,7 +57,7 @@ Company Name: {{{companyName}}}
 Normalized Data:
 {{{normalizedData}}}
 
-Generate the following information:
+Generate the following information, formatted as Markdown with headings:
 
 1.  What does this company do (website, sector, clients, products)?
 2.  What is the type of company (startup / corporation / R&D center)?

@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { performOsintAnalysis, OsintAnalysisOutput } from "@/ai/flows/osint-analysis";
 import { normalizeStaffingMessage, NormalizeStaffingMessageOutput } from "@/ai/flows/normalize-staffing-message";
 import { Icons } from "@/components/icons";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import ReactMarkdown from 'react-markdown';
 
 interface ChatMessage {
@@ -29,7 +28,6 @@ export default function Home() {
 
     try {
       const normalized = await normalizeStaffingMessage({ message });
-      // setNormalizedData(normalized);
 
       const normalizedContent = `
 **Company Name:** ${normalized.companyName}
@@ -61,6 +59,7 @@ ${normalized.relevantInfo}`;
       }
 
       setChatHistory(prev => [...prev, { type: 'osint', content: osintContent }]);
+      setOsintResults(osint);
 
     } catch (error: any) {
       console.error("Analysis failed:", error);
@@ -85,7 +84,7 @@ ${normalized.relevantInfo}`;
                 placeholder="Paste staffing message here..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="mb-4"
+                className="mb-4 resize-none"
               />
               <Button onClick={handleAnalysis} disabled={isLoading}>
                 {isLoading ? (
@@ -106,35 +105,33 @@ ${normalized.relevantInfo}`;
               <CardTitle>Results</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col">
-              <ScrollArea className="h-[500px] w-full rounded-md border">
-                <div className="space-y-4">
-                  {chatHistory.map((chatMessage, index) => (
-                    <div key={index} className="mb-2">
-                      {chatMessage.type === 'prompt' && (
-                        <div className="text-sm text-muted-foreground">
-                          <span className="font-semibold">Staffing Message:</span>
-                          <ReactMarkdown>{chatMessage.content}</ReactMarkdown>
-                        </div>
-                      )}
-                      {chatMessage.type === 'normalized' && (
-                        <div className="text-sm text-muted-foreground">
-                          <span className="font-semibold">Normalized Data:</span>
-                          <ReactMarkdown>{chatMessage.content}</ReactMarkdown>
-                        </div>
-                      )}
-                      {chatMessage.type === 'osint' && (
-                        <div className="text-sm text-muted-foreground">
-                          <span className="font-semibold">OSINT Analysis:</span>
-                          <ReactMarkdown>{chatMessage.content}</ReactMarkdown>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                  {!isLoading && chatHistory.length === 0 && (
-                    <p className="text-sm text-muted-foreground">No results yet. Paste a staffing message and click "Analyze".</p>
-                  )}
-                </div>
-              </ScrollArea>
+              <div className="space-y-4">
+                {chatHistory.map((chatMessage, index) => (
+                  <div key={index} className="mb-2">
+                    {chatMessage.type === 'prompt' && (
+                      <div className="text-sm text-muted-foreground">
+                        <span className="font-semibold">Staffing Message:</span>
+                        <ReactMarkdown>{chatMessage.content}</ReactMarkdown>
+                      </div>
+                    )}
+                    {chatMessage.type === 'normalized' && (
+                      <div className="text-sm text-muted-foreground">
+                        <span className="font-semibold">Normalized Data:</span>
+                        <ReactMarkdown>{chatMessage.content}</ReactMarkdown>
+                      </div>
+                    )}
+                    {chatMessage.type === 'osint' && (
+                      <div className="text-sm text-muted-foreground">
+                        <span className="font-semibold">OSINT Analysis:</span>
+                        <ReactMarkdown>{chatMessage.content}</ReactMarkdown>
+                      </div>
+                    )}
+                  </div>
+                ))}
+                {!isLoading && chatHistory.length === 0 && (
+                  <p className="text-sm text-muted-foreground">No results yet. Paste a staffing message and click "Analyze".</p>
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>

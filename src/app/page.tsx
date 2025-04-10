@@ -75,8 +75,9 @@ export default function Home() {
                 {normalizedData && (
                   <div className="mb-4">
                     <h2 className="text-lg font-semibold text-foreground">Normalized Data</h2>
-                    <ReactMarkdown className="text-sm text-muted-foreground">
-                      {`
+                    <div className="text-sm text-muted-foreground">
+                      <ReactMarkdown>
+                        {`
 ### Company Name
 ${normalizedData.companyName}
 
@@ -98,15 +99,17 @@ ${normalizedData.englishLevel || 'Not specified'}
 ### Relevant Info
 ${normalizedData.relevantInfo}
                       `}
-                    </ReactMarkdown>
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 )}
 
                 {osintResults && (
                   <div>
                     <h2 className="text-lg font-semibold text-foreground">OSINT Analysis</h2>
-                    <ReactMarkdown className="text-sm text-muted-foreground">
-                      {`
+                    <div className="text-sm text-muted-foreground">
+                      <ReactMarkdown>
+                        {`
 ### Company Summary
 ${osintResults.companyInfo.summary}
 
@@ -122,7 +125,8 @@ ${osintResults.companyInfo.attractivenessScore}
 ### Ideal Candidate Profile
 ${osintResults.companyInfo.idealCandidateProfile}
                       `}
-                    </ReactMarkdown>
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 )}
 

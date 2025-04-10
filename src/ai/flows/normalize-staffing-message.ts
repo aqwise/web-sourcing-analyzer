@@ -49,18 +49,18 @@ const normalizeStaffingMessagePrompt = ai.definePrompt({
       relevantInfo: z.string().describe('Relevant information from the request that was not included in other fields.'),
     }),
   },
-  prompt: `Проанализируй этот стаффинг-запрос и извлеки следующую информацию:
-1. Название компании
-2. Название роли
-3. Необходимый технологический стек
-4. Продолжительность проекта
-5. Приблизительный размер команды (если указан или подразумевается)
-6. Минимальный уровень английского языка
-7. Релевантная информация из запроса, не включенная в другие категории
+  prompt: `Analyze this staffing request and extract the following information:
+1. Company name
+2. Role name
+3. Required tech stack
+4. Project duration
+5. Approximate team size (if specified or implied)
+6. Minimum level of English
+7. Relevant information from the request that was not included in other categories
 
-Форматируй свой ответ в Markdown с заголовками.
+Format your answer in Markdown with titles.
 
-Исходный текст:
+Source text:
 {{{message}}}`,
 });
 
@@ -74,9 +74,23 @@ const normalizeStaffingMessageFlow = ai.defineFlow<
     outputSchema: NormalizeStaffingMessageOutputSchema,
   },
   async input => {
-    const {output} = await normalizeStaffingMessagePrompt(input);
-    return output!;
+    try {
+      const {output} = await normalizeStaffingMessagePrompt(input);
+      return output!;
+    } catch (e: any) {
+      if (e.message.includes('503 Service Unavailable')) {
+        console.error('Service Unavailable error: ', e);
+        return {
+          companyName: 'Service Unavailable',
+          role: 'Service Unavailable',
+          techStack: 'Service Unavailable',
+          projectDuration: 'Service Unavailable',
+          teamSize: 'Service Unavailable',
+          englishLevel: 'Service Unavailable',
+          relevantInfo: 'Service Unavailable',
+        };
+      }
+      throw e;
+    }
   }
 );
-
-

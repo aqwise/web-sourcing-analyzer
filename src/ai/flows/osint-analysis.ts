@@ -50,20 +50,20 @@ const prompt = ai.definePrompt({
       }).describe('OSINT analysis of the company')
     }),
   },
-  prompt: `Ты - AI аналитик. Учитывая название компании и нормализованные данные из сообщения о найме, выполни OSINT-анализ для сбора информации о компании. Ответь на русском языке.
+  prompt: `You are an AI analyst. Given the company name and normalized data from the hiring message, perform an OSINT analysis to gather information about the company. Answer in English.
 
-Название компании: {{{companyName}}}
+Company name: {{{companyName}}}
 
-Нормализованные данные:
+Normalized data:
 {{{normalizedData}}}
 
-Сгенерируй следующую информацию, отформатированную как Markdown с заголовками:
+Generate the following information, formatted as Markdown with titles:
 
-1.  Что делает эта компания (веб-сайт, сектор, клиенты, продукты)?
-2.  Какой тип компании (стартап / корпорация / R&D центр)?
-3.  Какие интересные факты о компании (AI, инвестиции, наем)?
-4.  Насколько привлекательна эта компания для QA Automation Engineer, исходя из стека проекта (оценка от 1 до 5)?
-5.  Каков идеальный профиль QA-специалиста для работы в этой компании, включая софт-скиллы, хард-скиллы, задачи и привычные проекты/технологии?`,
+1.  What does this company do (website, sector, clients, products)?
+2.  What type of company is it (startup / corporation / R&D center)?
+3.  What are some interesting facts about the company (AI, investments, hiring)?
+4.  How attractive is this company for a QA Automation Engineer, based on the project stack (score from 1 to 5)?
+5.  What is the ideal profile of a QA specialist for working in this company, including soft skills, hard skills, tasks, and familiar projects/technologies?`,
 });
 
 const osintAnalysisFlow = ai.defineFlow<
@@ -74,8 +74,22 @@ const osintAnalysisFlow = ai.defineFlow<
   inputSchema: OsintAnalysisInputSchema,
   outputSchema: OsintAnalysisOutputSchema,
 }, async input => {
-  const {output} = await prompt(input);
-  return output!;
+  try {
+    const {output} = await prompt(input);
+    return output!;
+  } catch (e: any) {
+    if (e.message.includes('503 Service Unavailable')) {
+      console.error('Service Unavailable error: ', e);
+      return {
+        companyInfo: {
+          summary: 'Service Unavailable',
+          type: 'Service Unavailable',
+          interestingFacts: 'Service Unavailable',
+          attractivenessScore: 0,
+          idealCandidateProfile: 'Service Unavailable',
+        },
+      };
+    }
+    throw e;
+  }
 });
-
-

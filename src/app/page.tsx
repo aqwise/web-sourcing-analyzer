@@ -47,12 +47,17 @@ export default function Home() {
       });
       setOsintResults(osint);
 
-      const osintContent = `
-**Company Summary:** ${osintResults.companyInfo.summary}
-**Company Type:** ${osintResults.companyInfo.type}
-**Interesting Facts:** ${osintResults.companyInfo.interestingFacts}
-**Attractiveness Score:** ${osintResults.companyInfo.attractivenessScore}
-**Ideal Candidate Profile:** ${osintResults.companyInfo.idealCandidateProfile}`;
+      let osintContent = "";
+      if (osint && osint.companyInfo) {
+        osintContent = `
+**Company Summary:** ${osint.companyInfo.summary}
+**Company Type:** ${osint.companyInfo.type}
+**Interesting Facts:** ${osint.companyInfo.interestingFacts}
+**Attractiveness Score:** ${osint.companyInfo.attractivenessScore}
+**Ideal Candidate Profile:** ${osint.companyInfo.idealCandidateProfile}`;
+      } else {
+        osintContent = "OSINT analysis failed or returned no data.";
+      }
 
       setChatHistory(prev => [...prev, { type: 'osint', content: osintContent }]);
 
